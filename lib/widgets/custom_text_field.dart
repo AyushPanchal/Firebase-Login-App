@@ -8,14 +8,14 @@ class CustomTextField extends StatelessWidget {
   final IconData prefixIcon;
   final String hintText;
   final bool obscureText;
-  const CustomTextField(
-      {Key? key,
-      required this.fillColor,
-      required this.prefixIcon,
-      required this.hintText,
-      this.obscureText = false,
-      this.keyboardType = TextInputType.text})
-      : super(key: key);
+  const CustomTextField({
+    Key? key,
+    required this.fillColor,
+    required this.prefixIcon,
+    required this.hintText,
+    this.obscureText = false,
+    this.keyboardType = TextInputType.text,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +47,9 @@ class CustomTextField extends StatelessWidget {
           ],
         ),
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(18),
-            borderSide: BorderSide.none),
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide.none,
+        ),
       ),
     );
   }

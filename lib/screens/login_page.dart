@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:login_app_firebase/constants/dimensions.dart';
+import 'package:login_app_firebase/widgets/custom_button.dart';
 import '../constants/colors.dart';
 import '../widgets/custom_text_field.dart';
 
@@ -53,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
                 keyboardType: TextInputType.emailAddress,
                 fillColor: AppColours.activeColor.withOpacity(0.2),
                 prefixIcon: Icons.email_outlined,
-                hintText: 'Email Address',
+                hintText: 'Email',
               ),
               const SizedBox(
                 height: Dimensions.h20,
@@ -67,28 +68,41 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: Dimensions.h20 * 3 / 2,
               ),
-              Column(
+              const Center(
+                child: CustomButton(textData: "LOG IN"),
+              ),
+              const SizedBox(
+                height: Dimensions.h20 * 2 / 3,
+              ),
+              const Center(
+                child: Text(
+                  "Forgot Password?",
+                  style: TextStyle(color: AppColours.componentsColor),
+                ),
+              ),
+              const SizedBox(
+                height: Dimensions.h20 * 3,
+              ),
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: AppColours.componentsColor,
-                      borderRadius: BorderRadius.circular(50),
-                    ),
-                    height: 65,
-                    width: 230,
-                    child: const Center(
-                      child: Text(
-                        "LOGIN",
-                        style: TextStyle(
-                            color: AppColours.primaryColor,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold),
-                      ),
+                  const Text(
+                    "Don't have an account?",
+                    style: TextStyle(color: AppColours.inactiveColor),
+                  ),
+                  const SizedBox(
+                    width: Dimensions.h10 / 2,
+                  ),
+                  const InkWell(
+                    child: Text(
+                      "Sign up",
+                      style: TextStyle(
+                          color: AppColours.componentsColor,
+                          fontWeight: FontWeight.bold),
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
