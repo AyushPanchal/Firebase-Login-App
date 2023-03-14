@@ -73,8 +73,10 @@ class _OtpPageState extends State<OtpPage> {
               const SizedBox(
                 height: Dimensions.h20 * 1.5,
               ),
-              const Center(
-                child: CustomButton(textData: "SUBMIT"),
+              Center(
+                child: GestureDetector(
+                    onTap: () => Navigator.pushNamed(context, LoginPage.id),
+                    child: CustomButton(textData: "SUBMIT")),
               ),
               const SizedBox(
                 height: Dimensions.h20,
