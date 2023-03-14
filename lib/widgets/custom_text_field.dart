@@ -3,13 +3,17 @@ import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 
 class CustomTextField extends StatelessWidget {
+  IconData? suffixIcon;
+  VoidCallback? onSuffixIconTap;
   final TextInputType keyboardType;
   final Color fillColor;
   final IconData prefixIcon;
   final String hintText;
   final bool obscureText;
-  const CustomTextField({
+  CustomTextField({
     Key? key,
+    this.onSuffixIconTap,
+    this.suffixIcon,
     required this.fillColor,
     required this.prefixIcon,
     required this.hintText,
@@ -29,6 +33,14 @@ class CustomTextField extends StatelessWidget {
       cursorHeight: 20,
       cursorColor: AppColours.componentsColor,
       decoration: InputDecoration(
+        suffixIcon: GestureDetector(
+          onTap: onSuffixIconTap,
+          child: Icon(
+            suffixIcon,
+            color: AppColours.componentsColor,
+            size: 22,
+          ),
+        ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
             color: Colors.white.withOpacity(0.5),

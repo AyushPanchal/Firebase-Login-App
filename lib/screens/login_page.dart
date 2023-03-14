@@ -8,6 +8,7 @@ import '../widgets/custom_text_field.dart';
 
 class LoginPage extends StatefulWidget {
   static const id = "login_page_id";
+  static bool _obscureText = true;
   const LoginPage({Key? key}) : super(key: key);
 
   @override
@@ -69,10 +70,18 @@ class _LoginPageState extends State<LoginPage> {
                 height: Dimensions.h20,
               ),
               CustomTextField(
-                obscureText: true,
+                obscureText: LoginPage._obscureText,
                 fillColor: AppColours.activeColor.withOpacity(0.2),
                 prefixIcon: Icons.lock_outline,
                 hintText: 'Password',
+                onSuffixIconTap: () {
+                  setState(() {
+                    LoginPage._obscureText = !LoginPage._obscureText;
+                  });
+                },
+                suffixIcon: LoginPage._obscureText
+                    ? Icons.visibility_off
+                    : Icons.visibility,
               ),
               const SizedBox(
                 height: Dimensions.h20 * 3 / 2,

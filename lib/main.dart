@@ -7,7 +7,7 @@ import 'package:login_app_firebase/screens/signup_page.dart';
 void main() {
   runApp(
     MaterialApp(
-      initialRoute: LoginPage.id,
+      initialRoute: OtpPage.id,
       routes: {
         LoginPage.id: (context) => const LoginPage(),
         SignupPage.id: (context) => const SignupPage(),

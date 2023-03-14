@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:login_app_firebase/constants/colors.dart';
 import 'package:login_app_firebase/constants/dimensions.dart';
+import 'package:login_app_firebase/screens/login_page.dart';
 import 'package:login_app_firebase/widgets/custom_button.dart';
 import 'package:pinput/pinput.dart';
 
@@ -23,18 +24,18 @@ class _OtpPageState extends State<OtpPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(
+              const SizedBox(
                 height: Dimensions.h20 * 4,
               ),
-              Icon(
+              const Icon(
                 Icons.arrow_back_ios_new,
                 size: 28,
               ),
-              SizedBox(
+              const SizedBox(
                 height: Dimensions.h20,
               ),
               Image.asset('assets/images/otp_page_image-removebg.png'),
-              SizedBox(
+              const SizedBox(
                 height: Dimensions.h20,
               ),
               const Text(
@@ -55,33 +56,41 @@ class _OtpPageState extends State<OtpPage> {
                   color: AppColours.inactiveColor,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: Dimensions.h20 * 1.5,
               ),
               Pinput(
+                defaultPinTheme: PinTheme(
+                    margin: EdgeInsets.symmetric(horizontal: 0),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: AppColours.activeColor.withOpacity(0.3),
+                    ),
+                    height: 50,
+                    width: 55),
                 length: 6,
               ),
-              SizedBox(
+              const SizedBox(
                 height: Dimensions.h20 * 1.5,
               ),
-              Center(
+              const Center(
                 child: CustomButton(textData: "SUBMIT"),
               ),
-              SizedBox(
+              const SizedBox(
                 height: Dimensions.h20,
               ),
               Center(
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       "Did you receive any code?",
                       style: TextStyle(color: AppColours.inactiveColor),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: Dimensions.h20 / 4,
                     ),
                     GestureDetector(
-                      child: Text(
+                      child: const Text(
                         "RESEND CODE",
                         style: TextStyle(
                             color: AppColours.componentsColor,

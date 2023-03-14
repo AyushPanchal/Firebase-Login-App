@@ -8,6 +8,8 @@ import 'login_page.dart';
 
 class SignupPage extends StatefulWidget {
   static const id = "signup_page_id";
+  static bool _obscureTextPassword = true;
+  static bool _obscureTextConfirmPassword = true;
   const SignupPage({Key? key}) : super(key: key);
 
   @override
@@ -84,21 +86,39 @@ class _SignupPageState extends State<SignupPage> {
                 height: Dimensions.h20,
               ),
               CustomTextField(
-                obscureText: true,
+                obscureText: SignupPage._obscureTextPassword,
                 keyboardType: TextInputType.text,
                 fillColor: AppColours.activeColor.withOpacity(0.2),
                 prefixIcon: Icons.lock_outline,
                 hintText: 'Password',
+                onSuffixIconTap: () {
+                  setState(() {
+                    SignupPage._obscureTextPassword =
+                        !SignupPage._obscureTextPassword;
+                  });
+                },
+                suffixIcon: SignupPage._obscureTextPassword
+                    ? Icons.visibility_off
+                    : Icons.visibility,
               ),
               const SizedBox(
                 height: Dimensions.h20,
               ),
               CustomTextField(
-                obscureText: true,
+                obscureText: SignupPage._obscureTextConfirmPassword,
                 keyboardType: TextInputType.text,
                 fillColor: AppColours.activeColor.withOpacity(0.2),
                 prefixIcon: Icons.lock_outline,
                 hintText: 'Confirm Password',
+                onSuffixIconTap: () {
+                  setState(() {
+                    SignupPage._obscureTextConfirmPassword =
+                        !SignupPage._obscureTextConfirmPassword;
+                  });
+                },
+                suffixIcon: SignupPage._obscureTextConfirmPassword
+                    ? Icons.visibility_off
+                    : Icons.visibility,
               ),
               const SizedBox(
                 height: Dimensions.h20 * 3 / 2,
