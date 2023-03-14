@@ -1,10 +1,13 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:login_app_firebase/constants/dimensions.dart';
+import 'package:login_app_firebase/screens/signup_page.dart';
 import 'package:login_app_firebase/widgets/custom_button.dart';
 import '../constants/colors.dart';
 import '../widgets/custom_text_field.dart';
 
 class LoginPage extends StatefulWidget {
+  static const id = "login_page_id";
   const LoginPage({Key? key}) : super(key: key);
 
   @override
@@ -17,6 +20,8 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: AppColours.primaryColor,
       body: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
+        dragStartBehavior: DragStartBehavior.start,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: Dimensions.h20 * 2),
           child: Column(
@@ -26,8 +31,12 @@ class _LoginPageState extends State<LoginPage> {
                 height: Dimensions.h20 * 7,
               ),
               Center(
-                child: Image.asset(
-                  'assets/images/login_image.png',
+                child: SizedBox(
+                  height: 200,
+                  width: 200,
+                  child: Image.asset(
+                    'assets/images/Mobile_login_png.png',
+                  ),
                 ),
               ),
               const SizedBox(
@@ -81,20 +90,23 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               const SizedBox(
-                height: Dimensions.h20 * 3,
+                height: Dimensions.h20 * 2,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text(
+                  Text(
                     "Don't have an account?",
                     style: TextStyle(color: AppColours.inactiveColor),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     width: Dimensions.h10 / 2,
                   ),
-                  const InkWell(
-                    child: Text(
+                  InkWell(
+                    onTap: () {
+                      Navigator.pushNamed(context, SignupPage.id);
+                    },
+                    child: const Text(
                       "Sign up",
                       style: TextStyle(
                           color: AppColours.componentsColor,

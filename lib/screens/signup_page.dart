@@ -4,7 +4,10 @@ import 'package:login_app_firebase/constants/dimensions.dart';
 import 'package:login_app_firebase/widgets/custom_button.dart';
 import 'package:login_app_firebase/widgets/custom_text_field.dart';
 
+import 'login_page.dart';
+
 class SignupPage extends StatefulWidget {
+  static const id = "signup_page_id";
   const SignupPage({Key? key}) : super(key: key);
 
   @override
@@ -98,7 +101,7 @@ class _SignupPageState extends State<SignupPage> {
                 hintText: 'Confirm Password',
               ),
               const SizedBox(
-                height: Dimensions.h20 * 2,
+                height: Dimensions.h20 * 3 / 2,
               ),
               const Center(
                 child: CustomButton(textData: "SIGN UP"),
@@ -108,7 +111,7 @@ class _SignupPageState extends State<SignupPage> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children: [
                   Text(
                     "Already have an account?",
                     style: TextStyle(color: AppColours.inactiveColor),
@@ -117,6 +120,7 @@ class _SignupPageState extends State<SignupPage> {
                     width: Dimensions.h10 / 2,
                   ),
                   InkWell(
+                    onTap: () => Navigator.pushNamed(context, LoginPage.id),
                     child: Text(
                       "Sign in",
                       style: TextStyle(

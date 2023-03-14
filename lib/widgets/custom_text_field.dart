@@ -22,17 +22,23 @@ class CustomTextField extends StatelessWidget {
     return TextField(
       keyboardType: TextInputType.emailAddress,
       obscureText: obscureText,
-      style: const TextStyle(fontWeight: FontWeight.bold),
+      style: const TextStyle(
+        fontWeight: FontWeight.bold,
+      ),
       textAlign: TextAlign.left,
       cursorHeight: 20,
-      cursorColor: AppColours.activeColor,
+      cursorColor: AppColours.componentsColor,
       decoration: InputDecoration(
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.white.withOpacity(0.5)),
+          borderSide: BorderSide(
+            color: Colors.white.withOpacity(0.5),
+          ),
           borderRadius: BorderRadius.circular(18),
         ),
         hintText: hintText,
-        hintStyle: TextStyle(color: AppColours.activeColor.withOpacity(0.5)),
+        hintStyle: TextStyle(
+          color: AppColours.activeColor.withOpacity(0.5),
+        ),
         fillColor: fillColor,
         filled: true,
         prefixIcon: Row(
