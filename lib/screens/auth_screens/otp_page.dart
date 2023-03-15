@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:login_app_firebase/constants/colors.dart';
 import 'package:login_app_firebase/constants/dimensions.dart';
-import 'package:login_app_firebase/screens/login_page.dart';
+import 'login_page.dart';
 import 'package:login_app_firebase/widgets/custom_button.dart';
 import 'package:pinput/pinput.dart';
 
@@ -75,8 +75,9 @@ class _OtpPageState extends State<OtpPage> {
               ),
               Center(
                 child: GestureDetector(
-                    onTap: () => Navigator.pushNamed(context, LoginPage.id),
-                    child: CustomButton(textData: "SUBMIT")),
+                  onTap: () => Navigator.pushNamed(context, LoginPage.id),
+                  child: CustomButton(textData: "SUBMIT"),
+                ),
               ),
               const SizedBox(
                 height: Dimensions.h20,

@@ -4,13 +4,20 @@ import '../constants/colors.dart';
 
 class CustomButton extends StatelessWidget {
   final String textData;
-  const CustomButton({Key? key, required this.textData}) : super(key: key);
+  Color? textDataColor;
+  Color? backgroundColor;
+  CustomButton({
+    Key? key,
+    required this.textData,
+    this.backgroundColor = AppColours.componentsColor,
+    this.textDataColor = AppColours.primaryColor,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColours.componentsColor,
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(50),
       ),
       height: 65,
@@ -18,10 +25,8 @@ class CustomButton extends StatelessWidget {
       child: Center(
         child: Text(
           textData,
-          style: const TextStyle(
-              color: AppColours.primaryColor,
-              fontSize: 18,
-              fontWeight: FontWeight.bold),
+          style: TextStyle(
+              color: textDataColor, fontSize: 18, fontWeight: FontWeight.bold),
         ),
       ),
     );

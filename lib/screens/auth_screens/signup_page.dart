@@ -123,7 +123,7 @@ class _SignupPageState extends State<SignupPage> {
               const SizedBox(
                 height: Dimensions.h20 * 3 / 2,
               ),
-              const Center(
+              Center(
                 child: CustomButton(textData: "SIGN UP"),
               ),
               const SizedBox(

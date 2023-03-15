@@ -1,10 +1,10 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:login_app_firebase/constants/dimensions.dart';
-import 'package:login_app_firebase/screens/signup_page.dart';
+import 'signup_page.dart';
 import 'package:login_app_firebase/widgets/custom_button.dart';
-import '../constants/colors.dart';
-import '../widgets/custom_text_field.dart';
+import '../../constants/colors.dart';
+import '../../widgets/custom_text_field.dart';
 
 class LoginPage extends StatefulWidget {
   static const id = "login_page_id";
@@ -86,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: Dimensions.h20 * 3 / 2,
               ),
-              const Center(
+              Center(
                 child: CustomButton(textData: "LOG IN"),
               ),
               const SizedBox(
