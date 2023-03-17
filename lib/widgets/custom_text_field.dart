@@ -4,6 +4,9 @@ import '../constants/colors.dart';
 
 class CustomTextField extends StatelessWidget {
   IconData? suffixIcon;
+  String? errorText;
+  FormFieldValidator? validator;
+  TextEditingController? controller;
   VoidCallback? onSuffixIconTap;
   final TextInputType keyboardType;
   final Color fillColor;
@@ -12,6 +15,9 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   CustomTextField({
     Key? key,
+    this.validator,
+    this.errorText,
+    this.controller,
     this.onSuffixIconTap,
     this.suffixIcon,
     required this.fillColor,
@@ -23,7 +29,9 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      validator: validator,
+      controller: controller,
       keyboardType: TextInputType.emailAddress,
       obscureText: obscureText,
       style: const TextStyle(
@@ -33,6 +41,7 @@ class CustomTextField extends StatelessWidget {
       cursorHeight: 20,
       cursorColor: AppColours.componentsColor,
       decoration: InputDecoration(
+        errorText: errorText,
         suffixIcon: GestureDetector(
           onTap: onSuffixIconTap,
           child: Icon(
