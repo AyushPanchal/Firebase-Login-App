@@ -2,7 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:login_app_firebase/constants/dimensions.dart';
 import 'package:login_app_firebase/controllers/auth_controller.dart';
-import '../../widgets/error_message_signup_page.dart';
+import 'package:login_app_firebase/controllers/auth_data_controller.dart';
+import 'package:login_app_firebase/controllers/validation_controller.dart';
+import '../../controllers/validation_controller.dart';
 import 'signup_page.dart';
 import 'package:login_app_firebase/widgets/custom_button.dart';
 import '../../constants/colors.dart';
@@ -19,7 +21,9 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final AuthController controller = Get.find();
+  final AuthController authController = Get.find();
+  final AuthDataController authDataController = Get.find();
+  final ValidationController validationController = Get.find();
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -70,10 +74,13 @@ class _LoginPageState extends State<LoginPage> {
                 //Email
                 CustomTextField(
                   validator: (value) {
-                    bool isValid = controller.validateLoginEmail(value);
-                    return isValid ? null : controller.emailError.value;
+                    bool isValid =
+                        validationController.validateLoginEmail(value);
+                    return isValid
+                        ? null
+                        : validationController.emailError.value;
                   },
-                  controller: controller.loginEmailController,
+                  controller: authDataController.loginEmailController,
                   keyboardType: TextInputType.emailAddress,
                   fillColor: AppColours.activeColor.withOpacity(0.2),
                   prefixIcon: Icons.email_outlined,
@@ -85,10 +92,13 @@ class _LoginPageState extends State<LoginPage> {
                 //Password
                 CustomTextField(
                   validator: (value) {
-                    bool isValid = controller.validateLoginPassword(value);
-                    return isValid ? null : controller.passwordError.value;
+                    bool isValid =
+                        validationController.validateLoginPassword(value);
+                    return isValid
+                        ? null
+                        : validationController.passwordError.value;
                   },
-                  controller: controller.loginPasswordController,
+                  controller: authDataController.loginPasswordController,
                   obscureText: LoginPage._obscureText,
                   fillColor: AppColours.activeColor.withOpacity(0.2),
                   prefixIcon: Icons.lock_outline,
@@ -107,11 +117,15 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 Center(
                   child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _formKey.currentState!.validate();
-                          controller.validateLoginAll();
-                        });
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          authController.signInWithEmailAndPassword(
+                              authDataController.loginEmailController.text
+                                  .trim(),
+                              authDataController.loginPasswordController.text
+                                  .trim());
+                        }
+                        validationController.validateLoginAll();
                       },
                       child: CustomButton(textData: "LOG IN")),
                 ),

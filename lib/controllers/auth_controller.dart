@@ -1,239 +1,139 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:login_app_firebase/controllers/validation_controller.dart';
+import 'package:login_app_firebase/screens/auth_screens/auth_exports.dart';
+
+import '../screens/home_page.dart';
+// import 'package:login_app_firebase/controllers/auth_data_controller.dart';
 
 class AuthController extends GetxController {
-  //To check if form in signup is validated or not!
-  final RxBool isFormValidated = false.obs;
-  final RxBool isLoginFormValidated = false.obs;
+  // final _authData = Get.find<AuthDataController>();
+  final _validationController = Get.find<ValidationController>();
 
-  //for the error messages to show in sign up page
-  RxString fullNameError = RxString('');
-  RxString phoneNumberError = RxString('');
-  RxString emailError = RxString('');
-  RxString passwordError = RxString('');
-  RxString confirmPasswordError = RxString('');
+  //Boolean to show loading.. when user is signing in
+  RxBool isLoading = false.obs;
 
-  //to valid fields to show the error text else nothing is showed
-  RxBool fullNameValidator = false.obs;
-  RxBool phoneNumberValidator = false.obs;
-  RxBool emailValidator = false.obs;
-  RxBool passwordValidator = false.obs;
-  RxBool confirmPasswordValidator = false.obs;
+  /*=====FIREBASE AUTH INSTANCE======*/
+  final _auth = FirebaseAuth.instance;
 
-  //controllers to extract text from TextFormField in signup form
-  final fullNameController = TextEditingController();
-  final phoneNumberController = TextEditingController();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  final confirmPasswordController = TextEditingController();
+  /*=====GETTING CURRENT USER=====*/
+  late final Rx<User?> _currentUser;
 
-  //fields in signup form
-  String get fullName => fullNameController.text;
-  String get phoneNumber => phoneNumberController.text;
-  String get email => emailController.text;
-  String get password => passwordController.text;
-  String get confirmPassword => confirmPasswordController.text;
-
-  // validate full name
-  bool validateFullName(String fullName) {
-    if (fullName.isEmpty) {
-      fullNameValidator.value = false;
-      fullNameError.value = 'Full name is required';
-      return false;
-    } else if (fullName.length < 2) {
-      fullNameError.value = 'Full name must be at least 2 characters long';
-      return false;
-    } else {
-      fullNameError.value = '';
-      fullNameValidator.value = true;
-      return true;
+  /*=====METHOD TO REGISTER A NEW USER USING EMAIL AND PASSWORD=====*/
+  Future<void> registerWithEmailAndPassword(
+      String email, String password) async {
+    try {
+      isLoading.value = !isLoading.value;
+      //creating account
+      UserCredential userCredential =
+          await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      await userCredential.user!.sendEmailVerification();
+      isLoading.value = !isLoading.value;
+      Get.offAll(() => const OtpPage());
+    } on FirebaseAuthException catch (e) {
+      //Handling various exceptions
+      if (e.code == 'weak-password') {
+        // Handle weak password
+        Get.snackbar(
+          'Weak Password',
+          e.message!,
+          snackPosition: SnackPosition.BOTTOM,
+          margin: const EdgeInsets.only(bottom: 10, right: 10, left: 10),
+          backgroundColor: Colors.red.withOpacity(0.2),
+          colorText: Colors.white,
+          duration: const Duration(seconds: 3),
+        );
+      } else if (e.code == 'email-already-in-use') {
+        // Handle email already in use error
+        Get.snackbar(
+          'Email already in use',
+          e.message!,
+          snackPosition: SnackPosition.BOTTOM,
+          margin: EdgeInsets.only(bottom: 10, right: 10, left: 10),
+          backgroundColor: Colors.red.withOpacity(0.2),
+          colorText: Colors.white,
+          duration: Duration(seconds: 3),
+        );
+      } else {
+        // Handle other errors
+        Get.snackbar(
+          e.code,
+          e.message!,
+          snackPosition: SnackPosition.BOTTOM,
+          margin: EdgeInsets.only(bottom: 10, right: 10, left: 10),
+          backgroundColor: Colors.red.withOpacity(0.2),
+          colorText: Colors.white,
+          duration: Duration(seconds: 3),
+        );
+      }
     }
   }
 
-  //validate phone number
-  bool validatePhoneNumber(String phoneNumber) {
-    if (phoneNumber.isEmpty) {
-      phoneNumberError.value = 'Phone number is required';
-      phoneNumberValidator.value = false;
-      return false;
-    } else if (!RegExp(r'^\+?[1-9]\d{1,14}$').hasMatch(phoneNumber)) {
-      phoneNumberError.value = 'Invalid phone number';
-      return false;
-    } else {
-      phoneNumberError.value = '';
-      phoneNumberValidator.value = true;
-      return true;
+  Future<void> signInWithEmailAndPassword(String email, String password) async {
+    try {
+      // Show loading indicator
+      isLoading(true);
+
+      // Sign in the user with email and password
+      await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        // Handle user not found error
+        Get.snackbar(
+          'User not found',
+          e.message!,
+          snackPosition: SnackPosition.BOTTOM,
+          margin: EdgeInsets.only(bottom: 10, right: 10, left: 10),
+          backgroundColor: Colors.red.withOpacity(0.2),
+          colorText: Colors.white,
+          duration: Duration(seconds: 3),
+        );
+      } else if (e.code == 'wrong-password') {
+        // Handle wrong password error
+        Get.snackbar(
+          'Incorrect password!',
+          e.message!,
+          snackPosition: SnackPosition.BOTTOM,
+          margin: EdgeInsets.only(bottom: 10, right: 10, left: 10),
+          backgroundColor: Colors.red.withOpacity(0.2),
+          colorText: Colors.white,
+          duration: Duration(seconds: 3),
+        );
+      } else {
+        // Handle other errors
+        Get.snackbar(
+          e.code,
+          e.message!,
+          snackPosition: SnackPosition.BOTTOM,
+          margin: EdgeInsets.only(bottom: 10, right: 10, left: 10),
+          backgroundColor: Colors.red.withOpacity(0.2),
+          colorText: Colors.white,
+          duration: Duration(seconds: 3),
+        );
+      }
+    } finally {
+      // Hide loading indicator
+      isLoading(false);
     }
-  }
-
-  //validate email
-  bool validateEmail(String email) {
-    final emailRegex =
-        RegExp(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$');
-    if (email.isEmpty) {
-      emailError.value = 'Email is required';
-      emailValidator.value = false;
-      return false;
-    } else if (!emailRegex.hasMatch(email)) {
-      emailError.value = 'Invalid email format';
-      return false;
-    } else {
-      emailError.value = '';
-      emailValidator.value = true;
-      return true;
-    }
-  }
-
-  //validate password
-  bool validatePassword(String password) {
-    // Password must be at least 8 characters long
-    if (password.length < 8) {
-      passwordError.value = 'Password must be at least 8 characters long';
-      passwordValidator.value = false;
-      return false;
-    }
-
-    // Password must contain at least one uppercase letter
-    if (!password.contains(RegExp(r'[A-Z]'))) {
-      passwordError.value =
-          'Password must contain at least one uppercase letter';
-      return false;
-    }
-
-    // Password must contain at least one lowercase letter
-    if (!password.contains(RegExp(r'[a-z]'))) {
-      passwordError.value =
-          'Password must contain at least one lowercase letter';
-
-      return false;
-    }
-
-    // Password must contain at least one digit
-    if (!password.contains(RegExp(r'[0-9]'))) {
-      passwordError.value = 'Password must contain at least one digit';
-      return false;
-    }
-
-    passwordError.value = '';
-    passwordValidator.value = true;
-    return true;
-  }
-
-  //validate confirm password
-  bool validateConfirmPassword(String confirmPassword, String password) {
-    if (confirmPassword.isEmpty) {
-      confirmPasswordError.value = 'Confirm password is required';
-      confirmPasswordValidator.value = false;
-      return false;
-    } else if (confirmPassword != password) {
-      confirmPasswordError.value = 'Passwords do not match';
-      return false;
-    } else {
-      confirmPasswordError.value = '';
-      confirmPasswordValidator.value = true;
-      return true;
-    }
-  }
-
-  //after validating all the fields in form ,we set form validated to true!!
-  void validateAll() {
-    validateFullName(fullName);
-    validatePhoneNumber(phoneNumber);
-    validateEmail(email);
-    validatePassword(password);
-    validateConfirmPassword(confirmPassword, password);
-    isFormValidated.value = true;
-  }
-
-  //Login functionalities!
-
-  //Login page textFormField controllers
-  final loginEmailController = TextEditingController();
-  final loginPasswordController = TextEditingController();
-
-  //fields for login page
-  String get loginEmail => loginEmailController.text;
-  String get loginPassword => loginPasswordController.text;
-
-  RxBool loginEmailValidator = false.obs;
-  RxBool loginPasswordValidator = false.obs;
-
-  //validate Login email
-  bool validateLoginEmail(String loginEmail) {
-    final emailRegex =
-        RegExp(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$');
-    if (loginEmail.isEmpty) {
-      emailError.value = 'Email is required';
-      loginEmailValidator.value = false;
-      return false;
-    } else if (!emailRegex.hasMatch(loginEmail)) {
-      emailError.value = 'Invalid email format';
-      loginPasswordValidator.value = false;
-      return false;
-    } else {
-      emailError.value = '';
-      loginEmailValidator.value = true;
-      return true;
-    }
-  }
-
-  // validate Login password
-  bool validateLoginPassword(String loginPassword) {
-    // Password must be at least 8 characters long
-    if (loginPassword.length < 8) {
-      passwordError.value = 'Password must be at least 8 characters long';
-      loginPasswordValidator.value = false;
-      return false;
-    }
-
-    // Password must contain at least one uppercase letter
-    if (!loginPassword.contains(RegExp(r'[A-Z]'))) {
-      passwordError.value =
-          'Password must contain at least one uppercase letter';
-      return false;
-    }
-
-    // Password must contain at least one lowercase letter
-    if (!loginPassword.contains(RegExp(r'[a-z]'))) {
-      passwordError.value =
-          'Password must contain at least one lowercase letter';
-
-      return false;
-    }
-
-    // Password must contain at least one digit
-    if (!loginPassword.contains(RegExp(r'[0-9]'))) {
-      passwordError.value = 'Password must contain at least one digit';
-      return false;
-    }
-
-    passwordError.value = '';
-    loginPasswordValidator.value = true;
-    return true;
-  }
-
-  //validate all field in login
-  void validateLoginAll() {
-    validateLoginEmail(loginEmail);
-    validateLoginPassword(loginPassword);
-    isLoginFormValidated.value = true;
-  }
-
-  void clearControllers() {
-    fullNameController.clear();
-    phoneNumberController.clear();
-    emailController.clear();
-    passwordController.clear();
-    confirmPasswordController.clear();
   }
 
   @override
-  void dispose() {
-    fullNameController.dispose();
-    phoneNumberController.dispose();
-    emailController.dispose();
-    passwordController.dispose();
-    confirmPasswordController.dispose();
-    super.dispose();
+  void onReady() {
+    _currentUser = Rx<User?>(_auth.currentUser);
+    _currentUser.bindStream(_auth.userChanges());
+    ever(_currentUser, _setInitialScreen);
+  }
+
+  _setInitialScreen(User? user) {
+    user == null
+        ? Get.offAll(() => const LoginPage())
+        : Get.offAll(() => const HomePage());
   }
 }
