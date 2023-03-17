@@ -68,54 +68,56 @@ class _SignupPageState extends State<SignupPage> {
                 ),
                 //Full name
                 CustomTextField(
+                  validator: (value) {
+                    bool isValid = controller.validateFullName(value);
+                    return isValid ? null : controller.fullNameError.value;
+                  },
                   controller: controller.fullNameController,
                   keyboardType: TextInputType.text,
                   fillColor: AppColours.activeColor.withOpacity(0.2),
                   prefixIcon: Icons.person_outline_outlined,
                   hintText: 'Full Name',
                 ),
-                ErrorMessage(
-                  visibleCondition: !controller.fullNameValidator.value &&
-                      controller.isFormValidated.value,
-                  errorMessage: controller.fullNameError.value,
-                ),
                 const SizedBox(
                   height: Dimensions.h20,
                 ),
                 //Phone number
                 CustomTextField(
+                  validator: (value) {
+                    bool isValid = controller.validatePhoneNumber(value);
+                    return isValid ? null : controller.phoneNumberError.value;
+                  },
                   controller: controller.phoneNumberController,
                   keyboardType: TextInputType.phone,
                   fillColor: AppColours.activeColor.withOpacity(0.2),
                   prefixIcon: Icons.phone_android_sharp,
                   hintText: 'Phone Number',
                 ),
-                ErrorMessage(
-                  visibleCondition: !controller.phoneNumberValidator.value &&
-                      controller.isFormValidated.value,
-                  errorMessage: controller.phoneNumberError.value,
-                ),
                 const SizedBox(
                   height: Dimensions.h20,
                 ),
                 //Email
                 CustomTextField(
+                  validator: (value) {
+                    bool isValid = controller.validateEmail(value);
+                    return isValid ? null : controller.emailError.value;
+                  },
                   controller: controller.emailController,
                   keyboardType: TextInputType.emailAddress,
                   fillColor: AppColours.activeColor.withOpacity(0.2),
                   prefixIcon: Icons.email_outlined,
                   hintText: 'Email',
                 ),
-                ErrorMessage(
-                  visibleCondition: !controller.emailValidator.value &&
-                      controller.isFormValidated.value,
-                  errorMessage: controller.emailError.value,
-                ),
+
                 const SizedBox(
                   height: Dimensions.h20,
                 ),
                 //Password
                 CustomTextField(
+                  validator: (value) {
+                    bool isValid = controller.validatePassword(value);
+                    return isValid ? null : controller.passwordError.value;
+                  },
                   controller: controller.passwordController,
                   obscureText: SignupPage._obscureTextPassword,
                   keyboardType: TextInputType.text,
@@ -132,16 +134,19 @@ class _SignupPageState extends State<SignupPage> {
                       ? Icons.visibility_off
                       : Icons.visibility,
                 ),
-                ErrorMessage(
-                  visibleCondition: !controller.passwordValidator.value &&
-                      controller.isFormValidated.value,
-                  errorMessage: controller.passwordError.value,
-                ),
+
                 const SizedBox(
                   height: Dimensions.h20,
                 ),
                 //Confirm Password
                 CustomTextField(
+                  validator: (value) {
+                    bool isValid = controller.validateConfirmPassword(
+                        value, controller.password);
+                    return isValid
+                        ? null
+                        : controller.confirmPasswordError.value;
+                  },
                   controller: controller.confirmPasswordController,
                   obscureText: SignupPage._obscureTextConfirmPassword,
                   keyboardType: TextInputType.text,
@@ -158,12 +163,7 @@ class _SignupPageState extends State<SignupPage> {
                       ? Icons.visibility_off
                       : Icons.visibility,
                 ),
-                ErrorMessage(
-                  visibleCondition:
-                      !controller.confirmPasswordValidator.value &&
-                          controller.isFormValidated.value,
-                  errorMessage: controller.confirmPasswordError.value,
-                ),
+
                 const SizedBox(
                   height: Dimensions.h20 * 3 / 2,
                 ),

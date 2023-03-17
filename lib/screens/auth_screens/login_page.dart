@@ -69,22 +69,25 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 //Email
                 CustomTextField(
+                  validator: (value) {
+                    bool isValid = controller.validateLoginEmail(value);
+                    return isValid ? null : controller.emailError.value;
+                  },
                   controller: controller.loginEmailController,
                   keyboardType: TextInputType.emailAddress,
                   fillColor: AppColours.activeColor.withOpacity(0.2),
                   prefixIcon: Icons.email_outlined,
                   hintText: 'Email',
                 ),
-                ErrorMessage(
-                  visibleCondition: !controller.loginEmailValidator.value &&
-                      controller.isLoginFormValidated.value,
-                  errorMessage: controller.emailError.value,
-                ),
                 const SizedBox(
                   height: Dimensions.h20,
                 ),
                 //Password
                 CustomTextField(
+                  validator: (value) {
+                    bool isValid = controller.validateLoginPassword(value);
+                    return isValid ? null : controller.passwordError.value;
+                  },
                   controller: controller.loginPasswordController,
                   obscureText: LoginPage._obscureText,
                   fillColor: AppColours.activeColor.withOpacity(0.2),
@@ -98,11 +101,6 @@ class _LoginPageState extends State<LoginPage> {
                   suffixIcon: LoginPage._obscureText
                       ? Icons.visibility_off
                       : Icons.visibility,
-                ),
-                ErrorMessage(
-                  visibleCondition: !controller.loginPasswordValidator.value &&
-                      controller.isLoginFormValidated.value,
-                  errorMessage: controller.passwordError.value,
                 ),
                 const SizedBox(
                   height: Dimensions.h20 * 3 / 2,

@@ -1,12 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'screens/auth_screens/auth_exports.dart';
 import './helper/dependency_injection.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   init();
+  await Firebase.initializeApp();
   runApp(
     MaterialApp(
-      initialRoute: ForgetPasswordPage.id,
       routes: {
         '/': (context) => const LoginPage(),
         LoginPage.id: (context) => const LoginPage(),
