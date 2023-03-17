@@ -8,7 +8,7 @@ void main() {
     MaterialApp(
       initialRoute: ForgetPasswordPage.id,
       routes: {
-        '/': (context) => const SignupPage(),
+        '/': (context) => const LoginPage(),
         LoginPage.id: (context) => const LoginPage(),
         SignupPage.id: (context) => const SignupPage(),
         OtpPage.id: (context) => const OtpPage(),

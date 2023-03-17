@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class AuthController extends GetxController {
   //To check if form in signup is validated or not!
   final RxBool isFormValidated = false.obs;
+  final RxBool isLoginFormValidated = false.obs;
 
   //for the error messages to show in sign up page
   RxString fullNameError = RxString('');
@@ -83,7 +84,7 @@ class AuthController extends GetxController {
     }
   }
 
-// validate password
+  //validate password
   bool validatePassword(String password) {
     // Password must be at least 8 characters long
     if (password.length < 8) {
@@ -142,6 +143,80 @@ class AuthController extends GetxController {
     validatePassword(password);
     validateConfirmPassword(confirmPassword, password);
     isFormValidated.value = true;
+  }
+
+  //Login functionalities!
+
+  //Login page textFormField controllers
+  final loginEmailController = TextEditingController();
+  final loginPasswordController = TextEditingController();
+
+  //fields for login page
+  String get loginEmail => loginEmailController.text;
+  String get loginPassword => loginPasswordController.text;
+
+  RxBool loginEmailValidator = false.obs;
+  RxBool loginPasswordValidator = false.obs;
+
+  //validate Login email
+  bool validateLoginEmail(String loginEmail) {
+    final emailRegex =
+        RegExp(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$');
+    if (loginEmail.isEmpty) {
+      emailError.value = 'Email is required';
+      loginEmailValidator.value = false;
+      return false;
+    } else if (!emailRegex.hasMatch(loginEmail)) {
+      emailError.value = 'Invalid email format';
+      loginPasswordValidator.value = false;
+      return false;
+    } else {
+      emailError.value = '';
+      loginEmailValidator.value = true;
+      return true;
+    }
+  }
+
+  // validate Login password
+  bool validateLoginPassword(String loginPassword) {
+    // Password must be at least 8 characters long
+    if (loginPassword.length < 8) {
+      passwordError.value = 'Password must be at least 8 characters long';
+      loginPasswordValidator.value = false;
+      return false;
+    }
+
+    // Password must contain at least one uppercase letter
+    if (!loginPassword.contains(RegExp(r'[A-Z]'))) {
+      passwordError.value =
+          'Password must contain at least one uppercase letter';
+      return false;
+    }
+
+    // Password must contain at least one lowercase letter
+    if (!loginPassword.contains(RegExp(r'[a-z]'))) {
+      passwordError.value =
+          'Password must contain at least one lowercase letter';
+
+      return false;
+    }
+
+    // Password must contain at least one digit
+    if (!loginPassword.contains(RegExp(r'[0-9]'))) {
+      passwordError.value = 'Password must contain at least one digit';
+      return false;
+    }
+
+    passwordError.value = '';
+    loginPasswordValidator.value = true;
+    return true;
+  }
+
+  //validate all field in login
+  void validateLoginAll() {
+    validateLoginEmail(loginEmail);
+    validateLoginPassword(loginPassword);
+    isLoginFormValidated.value = true;
   }
 
   void clearControllers() {

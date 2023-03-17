@@ -25,6 +25,14 @@ class _SignupPageState extends State<SignupPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AppColours.primaryColor,
+        elevation: 0,
+        leading: Icon(
+          Icons.arrow_back_ios_new_outlined,
+          size: 28,
+        ),
+      ),
       backgroundColor: AppColours.primaryColor,
       body: SingleChildScrollView(
         child: Padding(
@@ -34,15 +42,8 @@ class _SignupPageState extends State<SignupPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
-                  padding: EdgeInsets.only(top: Dimensions.h20 * 3),
-                  child: Icon(
-                    Icons.arrow_back_ios_new_outlined,
-                    size: 28,
-                  ),
-                ),
                 const SizedBox(
-                  height: Dimensions.h20 * 2,
+                  height: Dimensions.h10,
                 ),
                 const Text(
                   "Create Account",
