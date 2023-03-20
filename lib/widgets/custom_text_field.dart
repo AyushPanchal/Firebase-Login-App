@@ -32,7 +32,7 @@ class CustomTextField extends StatelessWidget {
     return TextFormField(
       validator: validator,
       controller: controller,
-      keyboardType: TextInputType.emailAddress,
+      keyboardType: keyboardType,
       obscureText: obscureText,
       style: const TextStyle(
         fontWeight: FontWeight.bold,

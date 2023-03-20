@@ -4,6 +4,7 @@ import 'package:login_app_firebase/constants/colors.dart';
 import 'package:login_app_firebase/constants/dimensions.dart';
 import 'package:login_app_firebase/controllers/auth_controller.dart';
 import 'package:login_app_firebase/controllers/validation_controller.dart';
+import 'package:login_app_firebase/screens/auth_screens/auth_exports.dart';
 import 'package:login_app_firebase/widgets/custom_button.dart';
 import 'package:login_app_firebase/widgets/custom_text_field.dart';
 import 'package:login_app_firebase/widgets/loading_widget.dart';
@@ -25,6 +26,7 @@ class _SignupPageState extends State<SignupPage> {
   final AuthController authController = Get.find();
   final AuthDataController authDataController = Get.find();
   final ValidationController validationController = Get.find();
+  bool verifyWithEmail = false;
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -32,9 +34,14 @@ class _SignupPageState extends State<SignupPage> {
       appBar: AppBar(
         backgroundColor: AppColours.primaryColor,
         elevation: 0,
-        leading: Icon(
-          Icons.arrow_back_ios_new_outlined,
-          size: 28,
+        leading: GestureDetector(
+          onTap: () {
+            Get.back();
+          },
+          child: const Icon(
+            Icons.arrow_back_ios_new_outlined,
+            size: 28,
+          ),
         ),
       ),
       backgroundColor: AppColours.primaryColor,
@@ -48,15 +55,18 @@ class _SignupPageState extends State<SignupPage> {
                 opacity: authController.isLoading.value ? 0.2 : 1,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: Dimensions.h20 * 2),
+                      horizontal: Dimensions.h20 * 2,
+                      vertical: Dimensions.h20 * 4),
                   child: Form(
                     key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const SizedBox(
-                          height: Dimensions.h10,
-                        ),
+                        verifyWithEmail
+                            ? const SizedBox(height: Dimensions.h10)
+                            : const SizedBox(
+                                height: Dimensions.h20 * 3,
+                              ),
                         const Text(
                           "Create Account",
                           style: TextStyle(
@@ -97,100 +107,132 @@ class _SignupPageState extends State<SignupPage> {
                           height: Dimensions.h20,
                         ),
                         //Phone number
-                        CustomTextField(
-                          validator: (value) {
-                            bool isValid =
-                                validationController.validatePhoneNumber(value);
-                            return isValid
-                                ? null
-                                : validationController.phoneNumberError.value;
-                          },
-                          controller: authDataController.phoneNumberController,
-                          keyboardType: TextInputType.phone,
-                          fillColor: AppColours.activeColor.withOpacity(0.2),
-                          prefixIcon: Icons.phone_android_sharp,
-                          hintText: 'Phone Number',
-                        ),
-                        const SizedBox(
-                          height: Dimensions.h20,
-                        ),
-                        //Email
-                        CustomTextField(
-                          validator: (value) {
-                            bool isValid =
-                                validationController.validateEmail(value);
-                            return isValid
-                                ? null
-                                : validationController.emailError.value;
-                          },
-                          controller: authDataController.emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          fillColor: AppColours.activeColor.withOpacity(0.2),
-                          prefixIcon: Icons.email_outlined,
-                          hintText: 'Email',
-                        ),
+                        verifyWithEmail
+                            ? CustomTextField(
+                                validator: (value) {
+                                  bool isValid =
+                                      validationController.validateEmail(value);
+                                  return isValid
+                                      ? null
+                                      : validationController.emailError.value;
+                                },
+                                controller: authDataController
+                                    .emailOrPhoneNumberController,
+                                keyboardType: TextInputType.emailAddress,
+                                fillColor:
+                                    AppColours.activeColor.withOpacity(0.2),
+                                prefixIcon: Icons.email_outlined,
+                                hintText: 'Email',
+                              )
+                            : CustomTextField(
+                                validator: (value) {
+                                  bool isValid = validationController
+                                      .validatePhoneNumber(value);
+                                  return isValid
+                                      ? null
+                                      : validationController
+                                          .phoneNumberError.value;
+                                },
+                                controller: authDataController
+                                    .emailOrPhoneNumberController,
+                                keyboardType: TextInputType.phone,
+                                fillColor:
+                                    AppColours.activeColor.withOpacity(0.2),
+                                prefixIcon: Icons.phone_android_sharp,
+                                hintText: 'Phone Number',
+                              ),
 
-                        const SizedBox(
-                          height: Dimensions.h20,
-                        ),
+                        verifyWithEmail
+                            ? const SizedBox(
+                                height: Dimensions.h20,
+                              )
+                            : SizedBox.shrink(),
                         //Password
-                        CustomTextField(
-                          validator: (value) {
-                            bool isValid =
-                                validationController.validatePassword(value);
-                            return isValid
-                                ? null
-                                : validationController.passwordError.value;
-                          },
-                          controller: authDataController.passwordController,
-                          obscureText: SignupPage._obscureTextPassword,
-                          keyboardType: TextInputType.text,
-                          fillColor: AppColours.activeColor.withOpacity(0.2),
-                          prefixIcon: Icons.lock_outline,
-                          hintText: 'Password',
-                          onSuffixIconTap: () {
-                            setState(() {
-                              SignupPage._obscureTextPassword =
-                                  !SignupPage._obscureTextPassword;
-                            });
-                          },
-                          suffixIcon: SignupPage._obscureTextPassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                        ),
-
-                        const SizedBox(
-                          height: Dimensions.h20,
-                        ),
+                        verifyWithEmail
+                            ? CustomTextField(
+                                validator: (value) {
+                                  bool isValid = validationController
+                                      .validatePassword(value);
+                                  return isValid
+                                      ? null
+                                      : validationController
+                                          .passwordError.value;
+                                },
+                                controller:
+                                    authDataController.passwordController,
+                                obscureText: SignupPage._obscureTextPassword,
+                                keyboardType: TextInputType.text,
+                                fillColor:
+                                    AppColours.activeColor.withOpacity(0.2),
+                                prefixIcon: Icons.lock_outline,
+                                hintText: 'Password',
+                                onSuffixIconTap: () {
+                                  setState(() {
+                                    SignupPage._obscureTextPassword =
+                                        !SignupPage._obscureTextPassword;
+                                  });
+                                },
+                                suffixIcon: SignupPage._obscureTextPassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                              )
+                            : SizedBox.shrink(),
+                        verifyWithEmail
+                            ? const SizedBox(
+                                height: Dimensions.h20,
+                              )
+                            : const SizedBox.shrink(),
                         //Confirm Password
-                        CustomTextField(
-                          validator: (value) {
-                            bool isValid =
-                                validationController.validateConfirmPassword(
-                                    value, authDataController.password);
-                            return isValid
-                                ? null
-                                : validationController
-                                    .confirmPasswordError.value;
-                          },
-                          controller:
-                              authDataController.confirmPasswordController,
-                          obscureText: SignupPage._obscureTextConfirmPassword,
-                          keyboardType: TextInputType.text,
-                          fillColor: AppColours.activeColor.withOpacity(0.2),
-                          prefixIcon: Icons.lock_outline,
-                          hintText: 'Confirm Password',
-                          onSuffixIconTap: () {
+                        verifyWithEmail
+                            ? CustomTextField(
+                                validator: (value) {
+                                  bool isValid = validationController
+                                      .validateConfirmPassword(
+                                          value, authDataController.password);
+                                  return isValid
+                                      ? null
+                                      : validationController
+                                          .confirmPasswordError.value;
+                                },
+                                controller: authDataController
+                                    .confirmPasswordController,
+                                obscureText:
+                                    SignupPage._obscureTextConfirmPassword,
+                                keyboardType: TextInputType.text,
+                                fillColor:
+                                    AppColours.activeColor.withOpacity(0.2),
+                                prefixIcon: Icons.lock_outline,
+                                hintText: 'Confirm Password',
+                                onSuffixIconTap: () {
+                                  setState(() {
+                                    SignupPage._obscureTextConfirmPassword =
+                                        !SignupPage._obscureTextConfirmPassword;
+                                  });
+                                },
+                                suffixIcon:
+                                    SignupPage._obscureTextConfirmPassword
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                              )
+                            : SizedBox.shrink(),
+                        const SizedBox(
+                          height: Dimensions.h10,
+                        ),
+                        GestureDetector(
+                          onTap: () {
                             setState(() {
-                              SignupPage._obscureTextConfirmPassword =
-                                  !SignupPage._obscureTextConfirmPassword;
+                              verifyWithEmail = !verifyWithEmail;
                             });
                           },
-                          suffixIcon: SignupPage._obscureTextConfirmPassword
-                              ? Icons.visibility_off
-                              : Icons.visibility,
+                          child: const Padding(
+                            padding: EdgeInsets.only(left: 10.0),
+                            child: Text(
+                              'Sign up using email',
+                              style:
+                                  TextStyle(color: AppColours.componentsColor),
+                            ),
+                          ),
                         ),
-
                         const SizedBox(
                           height: Dimensions.h20 * 3 / 2,
                         ),
@@ -199,13 +241,10 @@ class _SignupPageState extends State<SignupPage> {
                               onTap: () async {
                                 if (_formKey.currentState!.validate()) {
                                   await authController
-                                      .registerWithEmailAndPassword(
-                                          authDataController
-                                              .emailController.text
+                                      .registerWithEmailOrPhoneNumber(
+                                          authDataController.emailOrPhoneNumber
                                               .trim(),
-                                          authDataController
-                                              .passwordController.text
-                                              .trim());
+                                          authDataController.password.trim());
                                 }
                                 validationController.validateAll();
                               },
@@ -217,17 +256,17 @@ class _SignupPageState extends State<SignupPage> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
+                            const Text(
                               "Already have an account?",
                               style: TextStyle(color: AppColours.inactiveColor),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: Dimensions.h10 / 2,
                             ),
                             InkWell(
                               onTap: () =>
                                   Navigator.pushNamed(context, LoginPage.id),
-                              child: Text(
+                              child: const Text(
                                 "Sign in",
                                 style: TextStyle(
                                     color: AppColours.componentsColor,

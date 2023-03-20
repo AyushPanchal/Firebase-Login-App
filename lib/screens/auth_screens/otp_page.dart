@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:login_app_firebase/constants/colors.dart';
 import 'package:login_app_firebase/constants/dimensions.dart';
-import 'login_page.dart';
+import 'package:login_app_firebase/controllers/auth_controller.dart';
+import '../../controllers/auth_data_controller.dart';
+import '../home_page.dart';
 import 'package:login_app_firebase/widgets/custom_button.dart';
 import 'package:pinput/pinput.dart';
+import 'package:get/get.dart';
 
 class OtpPage extends StatefulWidget {
   static const id = "otp_page_id";
@@ -14,6 +17,8 @@ class OtpPage extends StatefulWidget {
 }
 
 class _OtpPageState extends State<OtpPage> {
+  final authController = Get.find<AuthController>();
+  final authDataController = Get.find<AuthDataController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,6 +65,14 @@ class _OtpPageState extends State<OtpPage> {
                 height: Dimensions.h20 * 1.5,
               ),
               Pinput(
+                onSubmitted: (code) async {
+                  // authController.otp.value = code;
+                  authController.verifyOTP(code);
+                },
+                onCompleted: (code) async {
+                  // authController.otp.value = code;
+                  authController.verifyOTP(code);
+                },
                 defaultPinTheme: PinTheme(
                     margin: EdgeInsets.symmetric(horizontal: 0),
                     decoration: BoxDecoration(
@@ -75,7 +88,6 @@ class _OtpPageState extends State<OtpPage> {
               ),
               Center(
                 child: GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, LoginPage.id),
                   child: CustomButton(textData: "SUBMIT"),
                 ),
               ),
@@ -93,6 +105,10 @@ class _OtpPageState extends State<OtpPage> {
                       height: Dimensions.h20 / 4,
                     ),
                     GestureDetector(
+                      onTap: () async {
+                        await authController.authenticatePhoneNumber(
+                            authDataController.loginEmailOrPhoneNumber.trim());
+                      },
                       child: const Text(
                         "RESEND CODE",
                         style: TextStyle(

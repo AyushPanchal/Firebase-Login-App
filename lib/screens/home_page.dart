@@ -1,5 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 import 'package:flutter/material.dart';
+import 'package:login_app_firebase/controllers/auth_controller.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -9,7 +10,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _auth = FirebaseAuth.instance;
+  final _authController = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,14 +18,14 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Center(
-            child: Text(_auth.currentUser!.email!),
+            child: Text(_authController.currentUser.value!.uid),
           ),
           Center(
             child: ElevatedButton(
-              onPressed: () {
-                _auth.signOut();
+              onPressed: () async {
+                await _authController.logoutUser();
               },
-              child: Text('Sign out'),
+              child: const Text('Sign out'),
             ),
           )
         ],
