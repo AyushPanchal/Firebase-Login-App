@@ -1,22 +1,23 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
-import 'package:login_app_firebase/controllers/validation_controller.dart';
+// import 'package:login_app_firebase/controllers/validation_controller.dart';
 import 'package:login_app_firebase/screens/auth_screens/auth_exports.dart';
 import '../screens/home_page.dart';
 // import 'package:login_app_firebase/controllers/auth_data_controller.dart';
 
 class AuthController extends GetxController {
-  // final _authData = Get.find<AuthDataController>();
-  final _validationController = Get.find<ValidationController>();
-  final _fireStore = FirebaseFirestore.instance;
+  //final _authData = Get.find<AuthDataController>();
+  //final _validationController = Get.find<ValidationController>();
 
-  //Boolean to show loading.. when user is signing in
+  //Boolean to show loading... when user is signing in
   RxBool isLoading = false.obs;
   RxBool isVerified = false.obs;
-  /*=====FIREBASE AUTH INSTANCE======*/
+
+  /*=====FIREBASE AUTH INSTANCE=====*/
   final _auth = FirebaseAuth.instance;
+  
 
   /*=====GETTING CURRENT USER=====*/
   late final Rx<User?> _currentUser;
@@ -30,14 +31,14 @@ class AuthController extends GetxController {
     try {
       isLoading.value = true;
       //creating account
-      UserCredential userCredential = await _auth
+      await _auth
           .createUserWithEmailAndPassword(
         email: email,
         password: password,
       )
           .then((value) {
         isLoading.value = false;
-        Get.to(() => HomePage());
+        // Get.to(() => const HomePage());
         return value;
       });
       isLoading.value = false;
@@ -60,10 +61,10 @@ class AuthController extends GetxController {
           'Email already in use',
           e.message!,
           snackPosition: SnackPosition.BOTTOM,
-          margin: EdgeInsets.only(bottom: 10, right: 10, left: 10),
+          margin: const EdgeInsets.only(bottom: 10, right: 10, left: 10),
           backgroundColor: Colors.red.withOpacity(0.2),
           colorText: Colors.white,
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
         );
       } else {
         // Handle other errors
@@ -71,10 +72,10 @@ class AuthController extends GetxController {
           e.code,
           e.message!,
           snackPosition: SnackPosition.BOTTOM,
-          margin: EdgeInsets.only(bottom: 10, right: 10, left: 10),
+          margin: const EdgeInsets.only(bottom: 10, right: 10, left: 10),
           backgroundColor: Colors.red.withOpacity(0.2),
           colorText: Colors.white,
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
         );
       }
     } finally {
@@ -121,7 +122,7 @@ class AuthController extends GetxController {
       },
       codeSent: (verificationId, resendToken) {
         isLoading.value = false;
-        Get.to(() => OtpPage());
+        Get.to(() => const OtpPage());
         this.verificationId.value = verificationId;
       },
       codeAutoRetrievalTimeout: (verificationId) {
@@ -159,10 +160,10 @@ class AuthController extends GetxController {
           'User not found',
           e.message!,
           snackPosition: SnackPosition.BOTTOM,
-          margin: EdgeInsets.only(bottom: 10, right: 10, left: 10),
+          margin: const EdgeInsets.only(bottom: 10, right: 10, left: 10),
           backgroundColor: Colors.red.withOpacity(0.2),
           colorText: Colors.white,
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
         );
       } else if (e.code == 'wrong-password') {
         // Handle wrong password error
@@ -170,10 +171,10 @@ class AuthController extends GetxController {
           'Incorrect password!',
           e.message!,
           snackPosition: SnackPosition.BOTTOM,
-          margin: EdgeInsets.only(bottom: 10, right: 10, left: 10),
+          margin: const EdgeInsets.only(bottom: 10, right: 10, left: 10),
           backgroundColor: Colors.red.withOpacity(0.2),
           colorText: Colors.white,
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
         );
       } else {
         // Handle other errors
@@ -181,10 +182,10 @@ class AuthController extends GetxController {
           e.code,
           e.message!,
           snackPosition: SnackPosition.BOTTOM,
-          margin: EdgeInsets.only(bottom: 10, right: 10, left: 10),
+          margin: const EdgeInsets.only(bottom: 10, right: 10, left: 10),
           backgroundColor: Colors.red.withOpacity(0.2),
           colorText: Colors.white,
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
         );
       }
     } finally {
@@ -197,7 +198,6 @@ class AuthController extends GetxController {
   Future<void> signInWithEmailOrPhoneNumber(
       String emailOrPhoneNumber, String passwordOrOTP) async {
     if (emailOrPhoneNumber.contains('@')) {
-      print('null');
       await signInWithEmailAndPassword(emailOrPhoneNumber, passwordOrOTP);
     } else {
       Get.to(() => const OtpPage());
@@ -220,8 +220,6 @@ class AuthController extends GetxController {
 
   /*=====CHECK IF THE USER IS LOGGED IN OR NOT=====*/
   _setInitialScreen(User? user) {
-    user == null
-        ? Get.offAll(() => const LoginPage())
-        : Get.offAll(() => const HomePage());
+    user == null ? Get.offAllNamed('/') : Get.offAll(() => const HomePage());
   }
 }

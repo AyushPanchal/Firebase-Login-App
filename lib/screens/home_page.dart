@@ -16,7 +16,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        children: [
+        children: <Widget>[
           Center(
             child: Text(_authController.currentUser.value!.uid),
           ),
@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
               },
               child: const Text('Sign out'),
             ),
-          )
+          ),
         ],
       ),
     );

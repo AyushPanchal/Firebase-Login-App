@@ -4,6 +4,7 @@ import 'package:login_app_firebase/controllers/auth_data_controller.dart';
 
 class ValidationController extends GetxController {
   final _authData = Get.find<AuthDataController>();
+
   //To check if form in signup is validated or not!
   final RxBool isFormValidated = false.obs;
   final RxBool isLoginFormValidated = false.obs;

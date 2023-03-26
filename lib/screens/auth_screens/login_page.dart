@@ -41,6 +41,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: AppColours.primaryColor,
       body: SingleChildScrollView(
+        reverse: true,
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.manual,
         dragStartBehavior: DragStartBehavior.start,
         child: Obx(
@@ -159,9 +160,11 @@ class _LoginPageState extends State<LoginPage> {
                                     : Icons.visibility,
                               )
                             : SizedBox.shrink(),
-                        const SizedBox(
-                          height: Dimensions.h10,
-                        ),
+                        _verifyWithEmail
+                            ? const SizedBox(
+                                height: Dimensions.h10,
+                              )
+                            : SizedBox.shrink(),
                         GestureDetector(
                           onTap: () {
                             setState(() {

@@ -13,8 +13,7 @@ class AuthDataController extends GetxController {
 
   //fields in signup form
   String get fullName => fullNameController.text;
-  String get phoneNumber =>
-      countryCodeController.text + phoneNumberController.text;
+  String get phoneNumber => phoneNumberController.text;
   String get email => emailController.text;
   String get emailOrPhoneNumber => emailOrPhoneNumberController.text;
   String get password => passwordController.text;
@@ -23,7 +22,7 @@ class AuthDataController extends GetxController {
   //Login page textFormField controllers
   final loginEmailController = TextEditingController();
   final loginPasswordController = TextEditingController();
-  final loginEmailOrPhoneNumberController = TextEditingController();
+  final loginEmailOrPhoneNumberController = TextEditingController(text: '+91');
 
   //fields for login page
   String get loginEmail => loginEmailController.text;

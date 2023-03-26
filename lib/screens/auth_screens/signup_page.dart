@@ -46,6 +46,7 @@ class _SignupPageState extends State<SignupPage> {
       ),
       backgroundColor: AppColours.primaryColor,
       body: SingleChildScrollView(
+        reverse: true,
         child: Obx(() {
           return Stack(
             alignment: Alignment.center,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:login_app_firebase/constants/dimensions.dart';
+import 'package:login_app_firebase/constants/exports_constants.dart';
 import 'otp_page.dart';
 import 'signup_page.dart';
 import 'package:login_app_firebase/widgets/custom_button.dart';
@@ -7,7 +8,7 @@ import 'package:login_app_firebase/widgets/custom_text_field.dart';
 import '../../constants/colors.dart';
 
 class ForgetPasswordPage extends StatefulWidget {
-  static const id = "forget_password_page_id";
+  static const String id = "forget_password_page_id";
   const ForgetPasswordPage({Key? key}) : super(key: key);
 
   @override
@@ -30,6 +31,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
         leading: const Icon(Icons.arrow_back_ios_new),
       ),
       body: SingleChildScrollView(
+        reverse: true,
         child: Padding(
           padding: const EdgeInsets.all(Dimensions.h20),
           child: Column(
@@ -69,7 +71,24 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   onTap: () {
                     Navigator.pushNamed(context, OtpPage.id);
                   },
-                  child: CustomButton(textData: "SEND OTP")),
+                  child: SizedBox(
+                    width: double.maxFinite,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: AppColours.componentsColor,
+                        padding: EdgeInsets.symmetric(vertical: Dimensions.h15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(36),
+                        ),
+                      ),
+                      onPressed: () {},
+                      child: Text(
+                        'SEND OTP',
+                        style: TextStyle(
+                            fontSize: 18, color: AppColours.primaryColor),
+                      ),
+                    ),
+                  )),
               SizedBox(
                 height: Dimensions.h20 * 3 / 2,
               ),
@@ -87,10 +106,23 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                 onTap: () {
                   Navigator.pushNamed(context, SignupPage.id);
                 },
-                child: CustomButton(
-                  textData: "SIGN UP",
-                  backgroundColor: AppColours.activeColor.withOpacity(0.1),
-                  textDataColor: AppColours.componentsColor,
+                child: SizedBox(
+                  width: double.maxFinite,
+                  child: OutlinedButton(
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: AppColours.componentsColor),
+                      padding: EdgeInsets.symmetric(vertical: Dimensions.h15),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(36),
+                      ),
+                    ),
+                    onPressed: () {},
+                    child: Text(
+                      kSignUp,
+                      style: TextStyle(
+                          fontSize: 18, color: AppColours.componentsColor),
+                    ),
+                  ),
                 ),
               )
             ],

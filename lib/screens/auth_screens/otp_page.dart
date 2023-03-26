@@ -26,6 +26,7 @@ class _OtpPageState extends State<OtpPage> {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40.0),
         child: SingleChildScrollView(
+          reverse: true,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
