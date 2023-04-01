@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 class AuthDataController extends GetxController {
   //controllers to extract text from TextFormField in signup form
-  final countryCodeController = TextEditingController();
   final fullNameController = TextEditingController();
   final phoneNumberController = TextEditingController();
   final emailController = TextEditingController();

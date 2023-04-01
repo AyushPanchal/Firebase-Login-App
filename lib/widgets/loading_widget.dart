@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:login_app_firebase/controllers/auth_controller.dart';
+import 'package:login_app_firebase/controllers/authentication_controllers/auth_controller.dart';
 import 'package:get/get.dart';
 
 import '../constants/colors.dart';

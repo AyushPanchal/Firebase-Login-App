@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:login_app_firebase/constants/exports_constants.dart';
 import 'package:get/get.dart';
-import 'package:login_app_firebase/controllers/auth_controller.dart';
+import 'package:login_app_firebase/controllers/authentication_controllers/auth_controller.dart';
 import 'package:login_app_firebase/screens/auth_screens/auth_exports.dart';
-
-import '../../helper/routes.dart';
 
 class WelcomePage extends StatefulWidget {
   static const String id = 'welcome_page_id';
@@ -81,7 +79,9 @@ class _WelcomePageState extends State<WelcomePage> {
                       ),
                       primary: AppColours.componentsColor,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.to(() => const LoginPage());
+                    },
                     child: const Text(
                       kLogin,
                     ),

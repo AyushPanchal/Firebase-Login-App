@@ -13,7 +13,7 @@ Future<void> main() async {
   runApp(
     GetMaterialApp(
       routes: {
-        '/': (context) => const ForgetPasswordPage(),
+        '/': (context) => const WelcomePage(),
         LoginPage.id: (context) => const LoginPage(),
         SignupPage.id: (context) => const SignupPage(),
         OtpPage.id: (context) => const OtpPage(),

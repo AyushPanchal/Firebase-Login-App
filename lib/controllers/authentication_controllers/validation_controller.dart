@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
-import 'package:login_app_firebase/controllers/auth_controller.dart';
-import 'package:login_app_firebase/controllers/auth_data_controller.dart';
+import 'package:login_app_firebase/controllers/authentication_controllers/auth_controller.dart';
+import 'package:login_app_firebase/controllers/authentication_controllers/auth_data_controller.dart';
 
 class ValidationController extends GetxController {
   final _authData = Get.find<AuthDataController>();

@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 // import 'package:login_app_firebase/controllers/validation_controller.dart';
 import 'package:login_app_firebase/screens/auth_screens/auth_exports.dart';
-import '../screens/home_page.dart';
+import '../../screens/home_page.dart';
 // import 'package:login_app_firebase/controllers/auth_data_controller.dart';
 
 class AuthController extends GetxController {
@@ -17,7 +17,6 @@ class AuthController extends GetxController {
 
   /*=====FIREBASE AUTH INSTANCE=====*/
   final _auth = FirebaseAuth.instance;
-  
 
   /*=====GETTING CURRENT USER=====*/
   late final Rx<User?> _currentUser;
@@ -220,6 +219,8 @@ class AuthController extends GetxController {
 
   /*=====CHECK IF THE USER IS LOGGED IN OR NOT=====*/
   _setInitialScreen(User? user) {
-    user == null ? Get.offAllNamed('/') : Get.offAll(() => const HomePage());
+    user == null
+        ? Get.offAllNamed('/')
+        : Get.offAll(() => const UserDataPage());
   }
 }

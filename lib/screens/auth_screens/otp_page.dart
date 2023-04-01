@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:login_app_firebase/constants/colors.dart';
 import 'package:login_app_firebase/constants/dimensions.dart';
-import 'package:login_app_firebase/controllers/auth_controller.dart';
-import '../../controllers/auth_data_controller.dart';
+import 'package:login_app_firebase/controllers/authentication_controllers/auth_controller.dart';
+import '../../controllers/authentication_controllers/auth_data_controller.dart';
 import '../home_page.dart';
 import 'package:login_app_firebase/widgets/custom_button.dart';
 import 'package:pinput/pinput.dart';

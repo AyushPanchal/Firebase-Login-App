@@ -1,12 +1,12 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:login_app_firebase/constants/dimensions.dart';
-import 'package:login_app_firebase/controllers/auth_controller.dart';
-import 'package:login_app_firebase/controllers/auth_data_controller.dart';
-import 'package:login_app_firebase/controllers/validation_controller.dart';
+import 'package:login_app_firebase/controllers/authentication_controllers/auth_controller.dart';
+import 'package:login_app_firebase/controllers/authentication_controllers/auth_data_controller.dart';
+import 'package:login_app_firebase/controllers/authentication_controllers/validation_controller.dart';
 import 'package:login_app_firebase/screens/auth_screens/auth_exports.dart';
 import 'package:login_app_firebase/widgets/loading_widget.dart';
-import '../../controllers/validation_controller.dart';
+import '../../controllers/authentication_controllers/validation_controller.dart';
 import 'signup_page.dart';
 import 'package:login_app_firebase/widgets/custom_button.dart';
 import '../../constants/colors.dart';
@@ -196,17 +196,23 @@ class _LoginPageState extends State<LoginPage> {
                                           authDataController.loginPassword
                                               .trim());
                                 }
-                                validationController.validateLoginAll();
+                                Get.to(() => UserDataPage());
                               },
                               child: CustomButton(textData: "LOG IN")),
                         ),
                         const SizedBox(
                           height: Dimensions.h20 * 2 / 3,
                         ),
-                        const Center(
-                          child: Text(
-                            "Forgot Password?",
-                            style: TextStyle(color: AppColours.componentsColor),
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(() => const ForgetPasswordPage());
+                          },
+                          child: const Center(
+                            child: Text(
+                              "Forgot Password?",
+                              style:
+                                  TextStyle(color: AppColours.componentsColor),
+                            ),
                           ),
                         ),
                         const SizedBox(

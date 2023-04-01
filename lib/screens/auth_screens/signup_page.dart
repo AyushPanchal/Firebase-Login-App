@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:login_app_firebase/constants/colors.dart';
 import 'package:login_app_firebase/constants/dimensions.dart';
-import 'package:login_app_firebase/controllers/auth_controller.dart';
-import 'package:login_app_firebase/controllers/validation_controller.dart';
+import 'package:login_app_firebase/controllers/authentication_controllers/auth_controller.dart';
+import 'package:login_app_firebase/controllers/authentication_controllers/validation_controller.dart';
 import 'package:login_app_firebase/screens/auth_screens/auth_exports.dart';
 import 'package:login_app_firebase/widgets/custom_button.dart';
 import 'package:login_app_firebase/widgets/custom_text_field.dart';
 import 'package:login_app_firebase/widgets/loading_widget.dart';
 
-import '../../controllers/auth_data_controller.dart';
+import '../../controllers/authentication_controllers/auth_data_controller.dart';
 import 'login_page.dart';
 
 class SignupPage extends StatefulWidget {

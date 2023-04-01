@@ -1,8 +1,6 @@
-// To parse this JSON data, do
-//
-//     final user = userFromJson(jsonString);
-
 import 'dart:convert';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 User userFromJson(String str) => User.fromJson(json.decode(str));
 
@@ -21,7 +19,7 @@ class User {
     this.zipCode, //if grants location permission
     this.dateOfBirth, //Other page
     this.gender, //Other page
-    this.profilePicture, //Other page
+    this.profilePictureURL, //Other page
     this.createdAt, //while registering
     this.updatedAt, //if profile is updated
   });
@@ -37,9 +35,9 @@ class User {
   String? zipCode;
   DateTime? dateOfBirth;
   String? gender;
-  String? profilePicture;
+  String? profilePictureURL;
   DateTime? createdAt;
-  dynamic updatedAt;
+  DateTime? updatedAt;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
@@ -53,13 +51,15 @@ class User {
         zipCode: json["zipCode"],
         dateOfBirth: json["dateOfBirth"] == null
             ? null
-            : DateTime.parse(json["dateOfBirth"]),
+            : (json["dateOfBirth"] as Timestamp).toDate(),
         gender: json["gender"],
-        profilePicture: json["profilePicture"],
+        profilePictureURL: json["profilePictureURL"],
         createdAt: json["createdAt"] == null
             ? null
-            : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"],
+            : (json["createdAt"] as Timestamp).toDate(),
+        updatedAt: json["updatedAt"] == null
+            ? null
+            : (json["updatedAt"] as Timestamp).toDate(),
       );
 
   Map<String, dynamic> toJson() => {
@@ -72,10 +72,10 @@ class User {
         "state": state,
         "country": country,
         "zipCode": zipCode,
-        "dateOfBirth": dateOfBirth?.toIso8601String(),
+        "dateOfBirth": dateOfBirth,
         "gender": gender,
-        "profilePicture": profilePicture,
-        "createdAt": createdAt?.toIso8601String(),
+        "profilePictureURL": profilePictureURL,
+        "createdAt": createdAt,
         "updatedAt": updatedAt,
       };
 }
