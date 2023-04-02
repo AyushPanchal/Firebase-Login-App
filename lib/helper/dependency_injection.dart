@@ -11,9 +11,6 @@ void init() async {
   Get.lazyPut(() => AuthController(), fenix: true);
   Get.lazyPut(() => ValidationController(), fenix: true);
   Get.lazyPut(() => UserModelController(), fenix: true);
-  Get.lazyPut(
-    () => StorageController(),
-    fenix: true,
-  );
+  Get.lazyPut(() => StorageController(), fenix: true);
   Get.lazyPut(() => FirestoreController(), fenix: true);
 }

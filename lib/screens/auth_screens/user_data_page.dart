@@ -6,8 +6,9 @@ import 'package:login_app_firebase/controllers/authentication_controllers/auth_c
 import 'package:login_app_firebase/controllers/firebase_storage_controllers/storage_controller.dart';
 import 'package:login_app_firebase/controllers/firestore_controllers/firestore_controllers.dart';
 import 'package:login_app_firebase/controllers/model_controllers/user_model_controller.dart';
-
+import 'package:login_app_firebase/widgets/custom_text_field.dart';
 import '../../models/user_model.dart';
+import 'package:country_icons/country_icons.dart';
 
 class UserDataPage extends StatefulWidget {
   static const String id = 'user_model_screen_id';
@@ -18,11 +19,14 @@ class UserDataPage extends StatefulWidget {
 }
 
 class _UserDataPageState extends State<UserDataPage> {
-  final UserModelController _userModelController = Get.find();
+  final _formKey = GlobalKey<FormState>();
+  final UserModelController _userModelController = UserModelController.instance;
   final AuthController _authController = Get.find();
   final StorageController _storageController = Get.find();
   final FirestoreController _firestoreController = Get.find();
   File? imageFile;
+  bool isMaleSelected = true;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -34,103 +38,252 @@ class _UserDataPageState extends State<UserDataPage> {
     return Scaffold(
       backgroundColor: AppColours.primaryColor,
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new),
+          onPressed: () {},
+        ),
+        title: const Text('Set Profile'),
+        // actions: [
+        //   TextButton(
+        //     onPressed: () {},
+        //     style: TextButton.styleFrom(
+        //       primary: AppColours.componentsColor,
+        //       padding: const EdgeInsets.symmetric(horizontal: 20),
+        //     ),
+        //     child: const Text('SKIP'),
+        //   ),
+        // ],
         elevation: 0,
         backgroundColor: AppColours.primaryColor,
       ),
       body: SingleChildScrollView(
         reverse: true,
         scrollDirection: Axis.vertical,
-        child: Column(
-          children: [
-            StreamBuilder<User?>(
-              stream: _firestoreController.getData(),
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  DateTime date = snapshot.data!.dateOfBirth!;
-                  String dateFormat =
-                      "${date.day} / ${date.month} / ${date.year}";
-                  return GestureDetector(
-                    onTap: () async {
-                      var temp = await _userModelController.pickAndCropImage();
-                      setState(() {
-                        imageFile = temp;
-                      });
-                      await _storageController
-                          .uploadImageToFirebaseStorage(temp!);
-                    },
-                    child: Stack(
-                      children: [
-                        CircleAvatar(
-                          foregroundImage:
-                              NetworkImage(snapshot.data!.profilePictureURL!),
-                          radius: 50,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                const SizedBox(
+                  height: Dimensions.h20,
+                ),
+
+                /*=====Profile Image=====*/
+                Center(
+                  child: Stack(
+                    children: [
+                      CircleAvatar(
+                        foregroundImage: AssetImage(
+                          'assets/images/default_profile.jpg',
                         ),
-                        Positioned(
-                            right: 0,
-                            bottom: 0,
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  color: AppColours.inactiveColor,
-                                  borderRadius: BorderRadius.circular(50)),
-                              child: Icon(
-                                Icons.add_a_photo,
-                                color: AppColours.componentsColor,
-                                size: 20,
-                              ),
-                            ))
-                      ],
-                    ),
-                  );
-                } else {
-                  return GestureDetector(
-                    onTap: () async {
-                      var temp = await _userModelController.pickAndCropImage();
-                      setState(() {
-                        imageFile = temp;
-                      });
-                      await _storageController
-                          .uploadImageToFirebaseStorage(temp!);
-                    },
-                    child: Stack(
-                      children: [
-                        CircleAvatar(
-                          foregroundImage:
-                              AssetImage('assets/images/default_profile.jpg'),
-                          radius: 50,
+                        radius: 50,
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: Container(
+                          padding: const EdgeInsets.all(5),
+                          decoration: BoxDecoration(
+                            color: AppColours.inactiveColor.withOpacity(0.8),
+                            borderRadius: BorderRadius.circular(
+                              50,
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.edit_rounded,
+                            color: AppColours.componentsColor,
+                          ),
                         ),
-                        Positioned(
-                            right: 0,
-                            bottom: 0,
-                            child: Container(
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  color: AppColours.inactiveColor,
-                                  borderRadius: BorderRadius.circular(50)),
-                              child: Icon(
-                                Icons.add_a_photo,
-                                color: AppColours.componentsColor,
-                                size: 20,
-                              ),
-                            ))
-                      ],
+                      )
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: Dimensions.h20 * 2,
+                ),
+
+                /*=====Personal Info Text=====*/
+                const Text(
+                  'Personal Info',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: AppColours.componentsColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: Dimensions.h20,
+                ),
+
+                /*=====Gender selection=====*/
+                const Text(
+                  'Select your gender',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: AppColours.inactiveColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const SizedBox(
+                  height: Dimensions.h10,
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: Dimensions.h15,
+                          ),
+                          primary: isMaleSelected
+                              ? AppColours.primaryColor
+                              : AppColours.componentsColor,
+                          backgroundColor: isMaleSelected
+                              ? AppColours.componentsColor
+                              : Colors.transparent,
+                          side: const BorderSide(
+                              color: AppColours.componentsColor),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            isMaleSelected = true;
+                          });
+                        },
+                        child: const Text('Male'),
+                      ),
                     ),
-                  );
-                }
-              },
+                    const SizedBox(
+                      width: Dimensions.h10,
+                    ),
+                    Expanded(
+                      child: OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: Dimensions.h15,
+                          ),
+                          backgroundColor: isMaleSelected
+                              ? Colors.transparent
+                              : AppColours.componentsColor,
+                          primary: isMaleSelected
+                              ? AppColours.componentsColor
+                              : AppColours.primaryColor,
+                          side: const BorderSide(
+                            color: AppColours.componentsColor,
+                          ),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            isMaleSelected = false;
+                          });
+                        },
+                        child: const Text('Female'),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: Dimensions.h20,
+                ),
+
+                /*=====Birth date=====*/
+                CustomTextField(
+                  onTap: () {
+                    _userModelController.selectDate(context);
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Birth date is required.';
+                    }
+                  },
+                  readOnly: true,
+                  controller: _userModelController.dateOfBirthController,
+                  fillColor: AppColours.inactiveColor.withOpacity(0.7),
+                  prefixIcon: Icons.calendar_month_rounded,
+                  hintText: "Birth date",
+                ),
+                const SizedBox(
+                  height: Dimensions.h20,
+                ),
+
+                /*=====Zip code=====*/
+                CustomTextField(
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return null;
+                    }
+
+                    final RegExp zipCodeRegex = RegExp(r'^\d{6}$');
+
+                    if (!zipCodeRegex.hasMatch(value)) {
+                      return 'Invalid zip code format.';
+                    }
+
+                    return null;
+                  },
+                  controller: _userModelController.zipCodeController,
+                  fillColor: AppColours.inactiveColor.withOpacity(0.7),
+                  prefixIcon: Icons.location_on_rounded,
+                  hintText: "Zip code (Optional)",
+                ),
+                const SizedBox(
+                  height: Dimensions.h20,
+                ),
+
+                /*=====Country=====*/
+                CustomTextField(
+                  controller: _userModelController.countryController,
+                  fillColor: AppColours.inactiveColor.withOpacity(0.7),
+                  prefixIcon: Icons.flag_rounded,
+                  hintText: "Country (Optional)",
+                ),
+                const SizedBox(
+                  height: Dimensions.h20,
+                ),
+
+                /*=====State=====*/
+                CustomTextField(
+                  controller: _userModelController.stateController,
+                  fillColor: AppColours.inactiveColor.withOpacity(0.7),
+                  prefixIcon: Icons.location_on_rounded,
+                  hintText: "State (Optional)",
+                ),
+                const SizedBox(
+                  height: Dimensions.h20,
+                ),
+
+                /*=====City=====*/
+                CustomTextField(
+                  controller: _userModelController.cityController,
+                  fillColor: AppColours.inactiveColor.withOpacity(0.7),
+                  prefixIcon: Icons.location_city_rounded,
+                  hintText: "City (Optional)",
+                ),
+                const SizedBox(
+                  height: Dimensions.h15,
+                ),
+                SizedBox(
+                  width: double.maxFinite,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(26),
+                        ),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: Dimensions.h15,
+                        ),
+                        primary: AppColours.componentsColor,
+                        onPrimary: AppColours.primaryColor,
+                      ),
+                      onPressed: () {
+                        _formKey.currentState!.validate();
+                      },
+                      child: Text('SUBMIT')),
+                )
+              ],
             ),
-            ElevatedButton(
-              onPressed: () {
-                _authController.logoutUser();
-              },
-              child: const Text('Press me/logout'),
-            ),
-            StreamBuilder<User?>(
-                stream: _firestoreController.getData(),
-                builder: (context, snapshot) {
-                  return Text('hello');
-                })
-          ],
+          ),
         ),
       ),
     );

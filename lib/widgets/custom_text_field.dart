@@ -8,18 +8,22 @@ class CustomTextField extends StatelessWidget {
   FormFieldValidator? validator;
   TextEditingController? controller;
   VoidCallback? onSuffixIconTap;
+  VoidCallback? onTap;
   final TextInputType keyboardType;
   final Color fillColor;
   final IconData prefixIcon;
   final String hintText;
   final bool obscureText;
+  bool readOnly;
   CustomTextField({
     Key? key,
     this.validator,
+    this.readOnly = false,
     this.errorText,
     this.controller,
     this.onSuffixIconTap,
     this.suffixIcon,
+    this.onTap,
     required this.fillColor,
     required this.prefixIcon,
     required this.hintText,
@@ -30,6 +34,8 @@ class CustomTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      readOnly: readOnly,
+      onTap: onTap,
       validator: validator,
       controller: controller,
       keyboardType: keyboardType,

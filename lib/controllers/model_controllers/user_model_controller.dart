@@ -9,6 +9,8 @@ import '../../helper/remote_services.dart';
 import '../authentication_controllers/auth_data_controller.dart';
 
 class UserModelController extends GetxController {
+  static UserModelController get instance => Get.find();
+
   final _authDataController = Get.find<AuthDataController>();
   final TextEditingController cityController = TextEditingController();
   final TextEditingController stateController = TextEditingController();
@@ -61,6 +63,23 @@ class UserModelController extends GetxController {
 
   Future<void> getLocation() async {
     await RemoteServices().getCountryStateCityByLatLong();
+  }
+
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now());
+    if (picked != null && picked != DateTime.now()) {
+      // dateOfBirthController.clear();
+      dateOfBirthController.text =
+          '${picked.day}-${picked.month}-${picked.year}';
+    } else {
+      // dateOfBirthController.clear();
+      dateOfBirthController.text =
+          '${DateTime.now().day}-${DateTime.now().month}-${DateTime.now().year}';
+    }
   }
 
   void clearAllControllers() {

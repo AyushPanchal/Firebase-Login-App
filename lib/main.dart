@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:login_app_firebase/constants/colors.dart';
 import 'package:login_app_firebase/screens/auth_screens/welcome_page.dart';
 import 'helper/routes.dart';
 import 'screens/auth_screens/auth_exports.dart';
@@ -19,6 +20,7 @@ Future<void> main() async {
         OtpPage.id: (context) => const OtpPage(),
       },
       theme: ThemeData(
+        // primarySwatch: const MaterialColor(2, {2: AppColours.componentsColor},),
         brightness: Brightness.dark,
       ),
       themeMode: ThemeMode.dark,
