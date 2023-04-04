@@ -26,7 +26,6 @@ class _UserDataPageState extends State<UserDataPage> {
   final FirestoreController _firestoreController = Get.find();
   File? imageFile;
   bool isMaleSelected = true;
-
   @override
   void initState() {
     // TODO: implement initState
@@ -43,16 +42,6 @@ class _UserDataPageState extends State<UserDataPage> {
           onPressed: () {},
         ),
         title: const Text('Set Profile'),
-        // actions: [
-        //   TextButton(
-        //     onPressed: () {},
-        //     style: TextButton.styleFrom(
-        //       primary: AppColours.componentsColor,
-        //       padding: const EdgeInsets.symmetric(horizontal: 20),
-        //     ),
-        //     child: const Text('SKIP'),
-        //   ),
-        // ],
         elevation: 0,
         backgroundColor: AppColours.primaryColor,
       ),
@@ -72,32 +61,70 @@ class _UserDataPageState extends State<UserDataPage> {
 
                 /*=====Profile Image=====*/
                 Center(
-                  child: Stack(
-                    children: [
-                      CircleAvatar(
-                        foregroundImage: AssetImage(
-                          'assets/images/default_profile.jpg',
-                        ),
-                        radius: 50,
-                      ),
-                      Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: Container(
-                          padding: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                            color: AppColours.inactiveColor.withOpacity(0.8),
-                            borderRadius: BorderRadius.circular(
-                              50,
+                  child: GestureDetector(
+                    onTap: () async {
+                      File? image =
+                          await _userModelController.pickAndCropImage();
+                      image != null
+                          ? _storageController
+                              .uploadImageToFirebaseStorage(image)
+                              .then(
+                              (value) {
+                                setState(
+                                  () {
+                                    imageFile = image;
+                                  },
+                                );
+                              },
+                            )
+                          : null;
+                    },
+                    child: Stack(
+                      children: [
+                        StreamBuilder<User?>(
+                            stream: _firestoreController.getData(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasData &&
+                                  snapshot
+                                      .data!.profilePictureURL!.isNotEmpty) {
+                                return CircleAvatar(
+                                  foregroundImage: NetworkImage(
+                                      snapshot.data!.profilePictureURL!),
+                                  radius: 50,
+                                );
+                              } else {
+                                return imageFile != null
+                                    ? CircleAvatar(
+                                        foregroundImage: FileImage(imageFile!),
+                                        radius: 50,
+                                      )
+                                    : const CircleAvatar(
+                                        foregroundImage: AssetImage(
+                                          'assets/images/default_profile.jpg',
+                                        ),
+                                        radius: 50,
+                                      );
+                              }
+                            }),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(5),
+                            decoration: BoxDecoration(
+                              color: AppColours.inactiveColor.withOpacity(0.8),
+                              borderRadius: BorderRadius.circular(
+                                50,
+                              ),
+                            ),
+                            child: const Icon(
+                              Icons.edit_rounded,
+                              color: AppColours.componentsColor,
                             ),
                           ),
-                          child: const Icon(
-                            Icons.edit_rounded,
-                            color: AppColours.componentsColor,
-                          ),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(
@@ -147,6 +174,8 @@ class _UserDataPageState extends State<UserDataPage> {
                               color: AppColours.componentsColor),
                         ),
                         onPressed: () {
+                          // _authController.logoutUser();
+                          _userModelController.genderController.text = 'male';
                           setState(() {
                             isMaleSelected = true;
                           });
@@ -176,6 +205,8 @@ class _UserDataPageState extends State<UserDataPage> {
                         onPressed: () {
                           setState(() {
                             isMaleSelected = false;
+                            _userModelController.genderController.text =
+                                'female';
                           });
                         },
                         child: const Text('Female'),
@@ -276,10 +307,14 @@ class _UserDataPageState extends State<UserDataPage> {
                         primary: AppColours.componentsColor,
                         onPrimary: AppColours.primaryColor,
                       ),
-                      onPressed: () {
-                        _formKey.currentState!.validate();
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          await _firestoreController
+                              .updateUserDataOfRegistrationPageToFirestore(
+                                  _userModelController.user);
+                        }
                       },
-                      child: Text('SUBMIT')),
+                      child: const Text('SUBMIT')),
                 )
               ],
             ),

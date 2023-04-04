@@ -21,7 +21,7 @@ class AuthDataController extends GetxController {
   //Login page textFormField controllers
   final loginEmailController = TextEditingController();
   final loginPasswordController = TextEditingController();
-  final loginEmailOrPhoneNumberController = TextEditingController(text: '+91');
+  final loginEmailOrPhoneNumberController = TextEditingController();
 
   //fields for login page
   String get loginEmail => loginEmailController.text;

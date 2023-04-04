@@ -1,18 +1,20 @@
 import 'dart:convert';
-
+import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../controllers/authentication_controllers/auth_controller.dart';
 
 User userFromJson(String str) => User.fromJson(json.decode(str));
 
 String userToJson(User data) => json.encode(data.toJson());
 
 class User {
+  final AuthController _authController = Get.find();
   User({
     this.id, //firebase auth
     this.fullName, //signup page
     this.email, //signup page or null is phone number
     this.phoneNumber, //signup page or null if email
-    this.address, //if grants location permission
     this.city, //if grants location permission
     this.state, //if grants location permission
     this.country, //if grants location permission
@@ -28,7 +30,6 @@ class User {
   String? fullName;
   String? email;
   String? phoneNumber;
-  String? address;
   String? city;
   String? state;
   String? country;
@@ -44,7 +45,6 @@ class User {
         fullName: json["fullName"],
         email: json["email"],
         phoneNumber: json["phoneNumber"],
-        address: json["address"],
         city: json["city"],
         state: json["state"],
         country: json["country"],
@@ -63,11 +63,10 @@ class User {
       );
 
   Map<String, dynamic> toJson() => {
-        "id": id,
+        "id": _authController.currentUser.value!.uid,
         "fullName": fullName,
         "email": email,
         "phoneNumber": phoneNumber,
-        "address": address,
         "city": city,
         "state": state,
         "country": country,
@@ -78,4 +77,11 @@ class User {
         "createdAt": createdAt,
         "updatedAt": updatedAt,
       };
+  // Map<String, dynamic> toJsonForRegister() => {
+  //       "id": _authController.currentUser.value!.uid,
+  //       "fullName": fullName,
+  //       "email": email,
+  //       "phoneNumber": phoneNumber,
+  //       "createdAt": createdAt,
+  //     };
 }

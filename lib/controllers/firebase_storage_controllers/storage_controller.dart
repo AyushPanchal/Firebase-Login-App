@@ -10,7 +10,7 @@ class StorageController extends GetxController {
   final UserModelController _userModelController = Get.find();
   final _firebaseStorage = FirebaseStorage.instance;
 
-  Future<String> uploadImageToFirebaseStorage(File imageFile) async {
+  Future<String?> uploadImageToFirebaseStorage(File imageFile) async {
     try {
       // Get the current user's unique ID
       final User? user = _authController.currentUser.value;
@@ -35,12 +35,10 @@ class StorageController extends GetxController {
       return downloadUrl;
     } on FirebaseException catch (e) {
       // Handle any Firebase related errors
-      print('Firebase error: ${e.code}');
-      throw e;
+      rethrow;
     } on Exception catch (e) {
       // Handle any other type of exception
-      print('Error: $e');
-      throw e;
+      return null;
     }
   }
 }

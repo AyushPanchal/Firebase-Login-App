@@ -4,6 +4,8 @@ import 'package:login_app_firebase/constants/colors.dart';
 import 'package:login_app_firebase/constants/dimensions.dart';
 import 'package:login_app_firebase/controllers/authentication_controllers/auth_controller.dart';
 import 'package:login_app_firebase/controllers/authentication_controllers/validation_controller.dart';
+import 'package:login_app_firebase/controllers/firestore_controllers/firestore_controllers.dart';
+import 'package:login_app_firebase/controllers/model_controllers/user_model_controller.dart';
 import 'package:login_app_firebase/screens/auth_screens/auth_exports.dart';
 import 'package:login_app_firebase/widgets/custom_button.dart';
 import 'package:login_app_firebase/widgets/custom_text_field.dart';
@@ -25,6 +27,8 @@ class SignupPage extends StatefulWidget {
 class _SignupPageState extends State<SignupPage> {
   final AuthController authController = Get.find();
   final AuthDataController authDataController = Get.find();
+  final FirestoreController _firestoreController = Get.find();
+  final UserModelController _userModelController = Get.find();
   final ValidationController validationController = Get.find();
   bool verifyWithEmail = false;
   final _formKey = GlobalKey<FormState>();
@@ -246,6 +250,11 @@ class _SignupPageState extends State<SignupPage> {
                                           authDataController.emailOrPhoneNumber
                                               .trim(),
                                           authDataController.password.trim());
+                                  _userModelController.createAt =
+                                      DateTime.now();
+                                  await _firestoreController
+                                      .addUserDataOfRegistrationPageToFirestore(
+                                          _userModelController.user);
                                 }
                                 validationController.validateAll();
                               },

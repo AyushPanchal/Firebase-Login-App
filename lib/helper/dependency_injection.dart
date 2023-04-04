@@ -6,7 +6,7 @@ import '../controllers/firebase_storage_controllers/storage_controller.dart';
 import '../controllers/firestore_controllers/firestore_controllers.dart';
 import '../controllers/model_controllers/user_model_controller.dart';
 
-void init() async {
+void init() {
   Get.lazyPut(() => AuthDataController(), fenix: true);
   Get.lazyPut(() => AuthController(), fenix: true);
   Get.lazyPut(() => ValidationController(), fenix: true);
